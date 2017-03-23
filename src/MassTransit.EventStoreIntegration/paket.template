@@ -1,0 +1,12 @@
+type project
+authors
+	Alexey Zimarev
+owner alexey_zimarev
+description
+	EventStore persistence for MassTransit
+licenseUrl https://github.com/alexeyzimarev/MassTransit.EventStore/blob/master/LICENSE
+projectUrl https://github.com/alexeyzimarev/MassTransit.EventStore
+tags MassTransit EventStore
+dependencies
+    MassTransit >= 3.5.6
+    EventStore < 4

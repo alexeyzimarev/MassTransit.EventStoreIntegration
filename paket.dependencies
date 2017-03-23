@@ -1,0 +1,7 @@
+source https://api.nuget.org/v3/index.json
+
+nuget MassTransit
+nuget EventStore.Client < 4
+nuget Newtonsoft.Json
+nuget FAKE
+nuget GitVersion.CommandLine
