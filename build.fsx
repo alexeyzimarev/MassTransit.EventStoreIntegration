@@ -106,7 +106,6 @@ Target "Pack" (fun _ ->
             OutputPath = nugetDir
             WorkingDir = rootDir + "/src"
             Version = gitVer.NuGetVersionV2
-            MinimumFromLockFile = true
          })
 )
 
