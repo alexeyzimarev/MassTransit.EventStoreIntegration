@@ -9,4 +9,4 @@ projectUrl https://github.com/alexeyzimarev/MassTransit.EventStore
 tags MassTransit EventStore
 dependencies
     MassTransit >= 3.5.6
-    EventStore < 4
+    EventStore.Client < 4
