@@ -5,3 +5,8 @@ nuget EventStore.Client < 4
 nuget Newtonsoft.Json
 nuget FAKE
 nuget GitVersion.CommandLine
+
+nuget EventStore.Client.Embedded < 4
+nuget xunit
+nuget xunit.runner.console
+nuget Shouldly

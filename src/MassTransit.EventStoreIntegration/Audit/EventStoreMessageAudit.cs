@@ -6,7 +6,7 @@ using MassTransit.Audit;
 using MassTransit.Util;
 using Newtonsoft.Json;
 
-namespace MassTransit.EventStoreIntegration
+namespace MassTransit.EventStoreIntegration.Audit
 {
     public class EventStoreMessageAudit : IMessageAuditStore
     {
