@@ -2,9 +2,10 @@ source https://api.nuget.org/v3/index.json
 
 nuget MassTransit
 nuget EventStore.Client < 4
-nuget Newtonsoft.Json
+nuget Newtonsoft.Json < 10
 nuget FAKE
 nuget GitVersion.CommandLine
+nuget MassTransit.Automatonymous
 
 nuget EventStore.Client.Embedded < 4
 nuget xunit

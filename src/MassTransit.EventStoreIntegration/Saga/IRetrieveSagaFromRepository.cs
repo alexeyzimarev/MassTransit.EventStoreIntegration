@@ -1,10 +1,10 @@
 ﻿using System;
-using MassTransit.Saga;
+using System.Threading.Tasks;
 
 namespace MassTransit.EventStoreIntegration.Saga
 {
-    public interface IRetrieveSagaFromRepository<out TSaga> where TSaga: ISaga
+    public interface IRetrieveSagaFromRepository<TSaga> where TSaga: IEventSourcedSaga
     {
-        TSaga GetSaga(Guid correlationId);
+        Task<TSaga> GetSaga(Guid correlationId);
     }
 }

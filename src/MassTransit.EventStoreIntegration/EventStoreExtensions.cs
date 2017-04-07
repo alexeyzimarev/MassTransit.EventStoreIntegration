@@ -48,7 +48,5 @@ namespace MassTransit.EventStoreIntegration
             }
             return new Tuple<int, IEnumerable<object>>(lastEventNumber, events);
         }
-
-
     }
 }
