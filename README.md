@@ -1,7 +1,7 @@
 # MassTransit.EventStore
 EventStore audit store for MassTransit
 
-[![NuGet](https://img.shields.io/nuget/v/MassTransit.EventStoreIntegration.svg)](https://www.nuget.org/packages/MassTransit.EventStore/)
+[![NuGet](https://img.shields.io/nuget/v/MassTransit.EventStoreIntegration.svg)](https://www.nuget.org/packages/MassTransit.EventStoreIntegration/)
 [![Build Status](https://www.myget.org/BuildSource/Badge/az-github?identifier=39b98d97-5aa1-42d9-aecd-cda6fb6f086d)](https://www.myget.org/)
 
 ## Installation
