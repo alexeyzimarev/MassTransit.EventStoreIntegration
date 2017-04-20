@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using EventStore.ClientAPI;
 using Newtonsoft.Json;
 
@@ -7,9 +8,9 @@ namespace MassTransit.EventStoreIntegration
 {
     public static class JsonSerialisation
     {
-        public static IEnumerable<object> Deserialize(ResolvedEvent resolvedEvent)
+        public static IEnumerable<object> Deserialize(ResolvedEvent resolvedEvent, string assemblyName)
         {
-            var type = TypeMapping.Get(resolvedEvent.Event.EventType);
+            var type = TypeMapping.Get(resolvedEvent.Event.EventType, assemblyName);
             if (type == null)
             {
                 yield return null;

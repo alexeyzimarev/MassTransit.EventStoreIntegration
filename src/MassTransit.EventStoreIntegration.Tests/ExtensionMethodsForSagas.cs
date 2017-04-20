@@ -7,7 +7,7 @@ namespace MassTransit.EventStoreIntegration.Tests
 {
     public static class ExtensionMethodsForSagas
     {
-        public static async Task<bool> ShouldContainSaga<TSaga>(this ISagaRepository<TSaga> repository, Guid sagaId,
+        public static async Task<TSaga> ShouldContainSaga<TSaga>(this ISagaRepository<TSaga> repository, Guid sagaId,
             TimeSpan timeout) where TSaga : class, IEventSourcedSaga
         {
             var giveUpAt = DateTime.Now + timeout;
@@ -16,11 +16,11 @@ namespace MassTransit.EventStoreIntegration.Tests
             {
                 var saga = await (repository as IRetrieveSagaFromRepository<TSaga>).GetSaga(sagaId);
                 if (saga != null)
-                    return true;
-                Task.Delay(10);
+                    return saga;
+                await Task.Delay(10);
             }
 
-            return false;
+            return null;
         }
 
         public static async Task<bool> ShouldContainSaga<TSaga>(this ISagaRepository<TSaga> repository, Guid sagaId,
@@ -31,7 +31,7 @@ namespace MassTransit.EventStoreIntegration.Tests
             while (DateTime.Now < giveUpAt)
             {
                 var saga = await (repository as IRetrieveSagaFromRepository<TSaga>).GetSaga(sagaId);
-                if (condition(saga))
+                if (saga != null && condition(saga))
                     return true;
                 await Task.Delay(10);
             }
@@ -50,7 +50,7 @@ namespace MassTransit.EventStoreIntegration.Tests
                 if (saga == null)
                     return true;
 
-                Task.Delay(10);
+                await Task.Delay(10);
             }
 
             return false;

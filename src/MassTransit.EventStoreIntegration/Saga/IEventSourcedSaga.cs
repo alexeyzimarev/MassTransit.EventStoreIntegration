@@ -5,7 +5,7 @@ namespace MassTransit.EventStoreIntegration.Saga
 {
     public interface IEventSourcedSaga : ISaga
     {
-        string StreamName { get; set; }
+        string StreamName { get; }
 
         int ExpectedVersion { get; set; }
 

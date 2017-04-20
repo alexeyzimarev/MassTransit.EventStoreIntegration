@@ -19,18 +19,20 @@ namespace MassTransit.EventStoreIntegration.Saga
         public EventStoreSagaRepository(IEventStoreConnection connection)
         {
             _connection = connection;
+            if (TypeMapping.GetTypeName(typeof(EventSourcedSagaInstance.SagaInstanceTransitioned)).Contains("+"))
+                TypeMapping.Add<EventSourcedSagaInstance.SagaInstanceTransitioned>("SagaInstanceTransitioned");
         }
 
         public async Task<TSaga> GetSaga(Guid correlationId)
         {
             var streamName = StreamName(correlationId);
-            var data = await _connection.ReadEvents(streamName, 512);
+            var data = await _connection.ReadEvents(streamName, 512, typeof(TSaga).Assembly);
             if (data == null) return null;
 
             var saga = SagaFactory();
-            saga.Initialize(data.Item2);
-            saga.ExpectedVersion = data.Item1;
-            saga.StreamName = streamName;
+            saga.Initialize(data.Events);
+            saga.CorrelationId = correlationId;
+            saga.ExpectedVersion = data.LastVersion;
             return saga;
         }
 

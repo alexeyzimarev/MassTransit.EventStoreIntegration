@@ -6,6 +6,11 @@ nuget Newtonsoft.Json < 10
 nuget FAKE
 nuget GitVersion.CommandLine
 nuget MassTransit.Automatonymous
+nuget MassTransit.RabbitMq
+nuget Serilog
+nuget Serilog.Sinks.Literate
+nuget MassTransit.SerilogIntegration
+nuget EventStore.SerilogAdapter
 
 nuget EventStore.Client.Embedded < 4
 nuget xunit

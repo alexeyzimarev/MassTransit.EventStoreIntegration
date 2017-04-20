@@ -8,13 +8,23 @@ namespace MassTransit.EventStoreIntegration.Saga
     {
         public Guid CorrelationId { get; set; }
         public int ExpectedVersion { get; set; }
-        public string StreamName { get; set; }
+
+        public string StreamName =>
+            TypeMapping.GetTypeName(GetType()) + "-" + CorrelationId.ToString("N");
 
         private string _currentState;
+
         public string CurrentState
         {
-            get => _currentState;
-            set => Apply(new SagaInstanceTransitioned{ InstanceId = CorrelationId, NewState = value});
+            get { return _currentState; }
+            set
+            {
+                Apply(new SagaInstanceTransitioned
+                {
+                    InstanceId = CorrelationId,
+                    NewState = value
+                });
+            }
         }
 
         readonly EventRecorder _recorder;
@@ -22,6 +32,9 @@ namespace MassTransit.EventStoreIntegration.Saga
 
         protected EventSourcedSagaInstance()
         {
+            _router = new EventRouter();
+            _recorder = new EventRecorder();
+            ExpectedVersion = EventStore.ClientAPI.ExpectedVersion.NoStream;
             Register<SagaInstanceTransitioned>(x => _currentState = x.NewState);
         }
 
@@ -88,7 +101,7 @@ namespace MassTransit.EventStoreIntegration.Saga
 
         void Record(object @event) => _recorder.Record(@event);
 
-        class SagaInstanceTransitioned
+        public class SagaInstanceTransitioned
         {
             public Guid InstanceId { get; set; }
             public string NewState { get; set; }
