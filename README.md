@@ -111,6 +111,28 @@ You can see that in each `When` we need to call the `ApplyChange` method
 to trigger the instance event handler, which changes the instance state.
 All changes are then saved as separate events.
 
+The last step is to tell MassTransit to use the EventStore repository:
+
+```csharp
+var connection = EventStoreConnection.Create(connectionString);
+var repository = new EventStoreSagaRepository<SampleInstance>(connection);
+
+var bus = Bus.Factory.CreateUsingRabbitMq(c =>
+    {
+        var host = c.Host(new Uri("rabbitmq://localhost"), h =>
+        {
+            h.Username("guest");
+            h.Password("guest");
+        });
+
+        var machine = new SampleStateMachine();
+        c.ReceiveEndpoint(host, "essaga_test", 
+            ep => ep.StateMachineSaga(machine, repository));
+    });
+```
+
+Working sample is available in this repository, in the `MassTransit.EventStoreIntegration.Sample` project.
+
 The full lifecycle of this saga is then looks like this in the EventStore:
 
 ![alt text](./images/es-saga.png "Saga stream")
