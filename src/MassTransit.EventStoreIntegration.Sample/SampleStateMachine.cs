@@ -1,4 +1,5 @@
 ﻿using Automatonymous;
+using Serilog;
 
 namespace MassTransit.EventStoreIntegration.Sample
 {
@@ -22,6 +23,7 @@ namespace MassTransit.EventStoreIntegration.Sample
                 When(StatusChanged)
                     .Then(c => c.Instance.Apply(c.Data)),
                 When(Stopped)
+                    .Then(c => Log.Information("Current state: {@instance}", c.Instance))
                     .TransitionTo(Done)
                     .Finalize());
 
