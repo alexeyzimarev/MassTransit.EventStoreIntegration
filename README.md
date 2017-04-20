@@ -8,7 +8,7 @@ EventStore audit store for MassTransit
 
 The library is published on nuget.org.
 
-Use `Install-Package MassTransit.EventStore` to install it.
+Use `Install-Package MassTransit.EventStoreIntegration` to install it.
 
 ## Usage
 
