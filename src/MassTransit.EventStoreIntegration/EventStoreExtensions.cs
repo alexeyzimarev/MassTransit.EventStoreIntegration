@@ -12,7 +12,7 @@ namespace MassTransit.EventStoreIntegration
         public static async Task<int> SaveEvents(this IEventStoreConnection connection,
             string streamIdentifier,
             IEnumerable<object> events,
-            int expectedVersion = ExpectedVersion.Any,
+            int expectedVersion = (int)ExpectedVersion.Any,
             object metadata = null)
         {
             var esEvents = events
@@ -25,7 +25,7 @@ namespace MassTransit.EventStoreIntegration
                         JsonSerialisation.Serialize(metadata)));
 
             var result = await connection.AppendToStreamAsync(streamIdentifier, expectedVersion, esEvents);
-            return result.NextExpectedVersion;
+            return (int)result.NextExpectedVersion;
         }
 
         public static async Task<EventsData> ReadEvents(this IEventStoreConnection connection,
@@ -48,7 +48,7 @@ namespace MassTransit.EventStoreIntegration
                 events.AddRange(slice.Events.SelectMany(x => JsonSerialisation.Deserialize(x, assemblyName)));
                 lastEventNumber = slice.LastEventNumber;
             }
-            var tuple = new EventsData(events, lastEventNumber);
+            var tuple = new EventsData(events, (int)lastEventNumber);
             return tuple;
         }
     }
