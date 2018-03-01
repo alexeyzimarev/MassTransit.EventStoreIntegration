@@ -2,26 +2,29 @@
 using System.Threading;
 using System.Threading.Tasks;
 using EventStore.ClientAPI;
-using EventStore.ClientAPI.Embedded;
 using EventStore.ClientAPI.SystemData;
-using EventStore.Core;
-using EventStore.Core.Data;
 using MassTransit.Util;
 using Xunit;
+
+using EventStore.ClientAPI.Embedded;
+using EventStore.Core;
+using EventStore.Core.Data;
 
 namespace MassTransit.EventStoreIntegration.Tests
 {
     public class EventStoreFixture : IDisposable
     {
-        public ClusterVNode Node { get; }
 
-        public IEventStoreConnection Connection { get; }
+		public ClusterVNode Node { get; }
+
+		public IEventStoreConnection Connection { get; }
 
         public UserCredentials Credentials { get; }
 
         public EventStoreFixture()
         {
-            var node = EmbeddedVNodeBuilder.
+
+			var node = EmbeddedVNodeBuilder.
                 AsSingleNode().
                 OnDefaultEndpoints().
                 RunInMemory().
@@ -53,10 +56,12 @@ namespace MassTransit.EventStoreIntegration.Tests
             //    new IPEndPoint(Opts.InternalIpDefault, Opts.ExternalTcpPortDefault));
             TaskUtil.Await(() => connection.ConnectAsync());
             Connection = connection;
-        }
 
-        public void Dispose()
+		}
+
+		public void Dispose()
         {
+
             var connection = Connection;
             if (connection != null)
             {
@@ -73,9 +78,11 @@ namespace MassTransit.EventStoreIntegration.Tests
             };
             node.Stop();
             tcs.Task.Wait();
+
         }
     }
 
-    [CollectionDefinition("EventStoreCollection")]
+	[CollectionDefinition("EventStoreCollection")]
     public class EventStoreCollection : ICollectionFixture<EventStoreFixture> { }
+
 }

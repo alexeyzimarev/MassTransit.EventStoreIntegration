@@ -15,8 +15,8 @@ namespace MassTransit.EventStoreIntegration.Saga
     {
         static readonly ILog Log = Logger.Get<EventStoreSagaRepository<TSaga>>();
         readonly IEventStoreConnection _connection;
-
-        public EventStoreSagaRepository(IEventStoreConnection connection)
+		
+		public EventStoreSagaRepository(IEventStoreConnection connection)
         {
             _connection = connection;
             if (TypeMapping.GetTypeName(typeof(EventSourcedSagaInstance.SagaInstanceTransitioned)).Contains("+"))

@@ -34,7 +34,7 @@ namespace MassTransit.EventStoreIntegration.Saga
         {
             _router = new EventRouter();
             _recorder = new EventRecorder();
-            ExpectedVersion = EventStore.ClientAPI.ExpectedVersion.NoStream;
+            ExpectedVersion = (int)EventStore.ClientAPI.ExpectedVersion.NoStream;
             Register<SagaInstanceTransitioned>(x => _currentState = x.NewState);
         }
 
