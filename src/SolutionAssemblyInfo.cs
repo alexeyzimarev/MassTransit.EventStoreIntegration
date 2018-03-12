@@ -6,7 +6,7 @@ using System.Reflection;
 [assembly: AssemblyCopyrightAttribute("Copyright © 2018 Alexey Zimarev")]
 [assembly: AssemblyVersionAttribute("1.0.1.0")]
 [assembly: AssemblyFileVersionAttribute("1.0.1.0")]
-[assembly: AssemblyInformationalVersionAttribute("1.0.1+5.Branch.master.Sha.a6268f81b5988a588bd86e20501a1b65321c7655")]
+[assembly: AssemblyInformationalVersionAttribute("1.0.1+6.Branch.master.Sha.36961326774d41c78a6d083fb83fa8931507bb6e")]
 namespace System {
     internal static class AssemblyVersionInformation {
         internal const System.String AssemblyProduct = "MassTransit.EventStoreIntegration";
@@ -14,6 +14,6 @@ namespace System {
         internal const System.String AssemblyCopyright = "Copyright © 2018 Alexey Zimarev";
         internal const System.String AssemblyVersion = "1.0.1.0";
         internal const System.String AssemblyFileVersion = "1.0.1.0";
-        internal const System.String AssemblyInformationalVersion = "1.0.1+5.Branch.master.Sha.a6268f81b5988a588bd86e20501a1b65321c7655";
+        internal const System.String AssemblyInformationalVersion = "1.0.1+6.Branch.master.Sha.36961326774d41c78a6d083fb83fa8931507bb6e";
     }
 }

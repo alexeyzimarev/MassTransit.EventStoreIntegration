@@ -91,8 +91,9 @@ Target "SetVersion" (fun _ ->
 )
 
 Target "BuildApp" (fun _ ->
-    MSBuildRelease buildDir "Build" appReferences
-        |> Log "BuildApp-Output: "
+    DotNetCli.Build (fun p-> { p with Project = @".\src\MassTransit.EventStoreIntegration.sln"
+                                    Configuration= "Release"
+                                    AdditionalArgs = gitversion })
 )
 
 Target "BuildTests" (fun _ ->
@@ -100,12 +101,12 @@ Target "BuildTests" (fun _ ->
         |> Log "BuildTests-Output: "
 )
 
-Target "Pack" (fun _ ->
-    Pack (fun p ->
+Target "Package" (fun _ ->
+    DotNetCli.Pack (fun p ->
         {p with
+            Project = @".\src\MassTransit.EventStoreIntegration.sln"
+            Configuration= "Release"
             OutputPath = nugetDir
-            WorkingDir = rootDir + "/src"
-            Version = gitVer.NuGetVersionV2
          })
 )
 
@@ -123,7 +124,7 @@ Target "Test" (fun _ ->
   ==> "BuildApp"
 //  ==> "BuildTests"
 //  ==> "Test"
-  ==> "Pack"
+  ==> "Package"
 
 // start build
-RunTargetOrDefault "Pack"
+RunTargetOrDefault "Package"
