@@ -2,6 +2,12 @@
 
   <PropertyGroup>
 		<TargetFrameworks>net461;netcoreapp2.0</TargetFrameworks>
+		<Description>MassTransit.EventStoreIntegration .NET Framework 4.6.1 and .NET Core 2</Description>
+		<PackageLicenseUrl>https://github.com/OriginalDeveloper/MassTransit.EventStoreIntegration/blob/master/LICENSE</PackageLicenseUrl>
+		<PackageProjectUrl>https://github.com/OriginalDeveloper/MassTransit.EventStoreIntegration</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/OriginalDeveloper/MassTransit.EventStoreIntegration</RepositoryUrl>
+		<AssemblyVersion>1.0.0.1</AssemblyVersion>
+		<FileVersion>1.0.0.1</FileVersion>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.0'">
