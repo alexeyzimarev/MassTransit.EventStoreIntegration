@@ -1,130 +1,83 @@
-// include Fake libs
-#I "packages/FAKE/tools/"
-#r "packages/FAKE/tools/FakeLib.dll"
-#r "packages/FAKE/tools/Fake.Deploy.Lib.dll"
-
+#r @"packages/FAKE/tools/FakeLib.dll"
+open System.IO
 open Fake
-open Fake.Paket
-open Fake.FileUtils
-open Fake.Testing.XUnit2
-open Fake.PaketTemplate
 open Fake.AssemblyInfoFile
-open Fake.ProcessHelper
-open Fake.FileHelper
-open Fake.Json
-open Fake.Testing.NUnit3
+open Fake.Git.Information
+open Fake.SemVerHelper
+open System
 
-let pathInfo = directoryInfo "."
-let product = environVarOrDefault "BAMBOO_productName" pathInfo.Name
-let company = "Alexey Zimarev"
-let copyright = "Copyright © " + System.DateTime.UtcNow.Year.ToString() + " " + company
+let buildArtifactPath = FullName "./build_artifacts"
+let packagesPath = FullName "./packages"
 
-// Directories
-let rootDir = currentDirectory
-let buildDir  = currentDirectory + "/bin/"
-let testsDir  = currentDirectory + "/tests/"
-let nugetDir = currentDirectory + "/nuget"
-let testOutputDir = currentDirectory + "/"
+let assemblyVersion = "1.0.1.0"
+let baseVersion = "1.0.1"
 
-let gitversion = "packages/GitVersion.CommandLine/tools/GitVersion.exe"
+let envVersion = (environVarOrDefault "APPVEYOR_BUILD_VERSION" (baseVersion + ".0"))
+let buildVersion = (envVersion.Substring(0, envVersion.LastIndexOf('.')))
 
-// Filesets
-let appReferences =
-    !! "src/**/*.csproj"
-      ++ "src/**/*.fsproj"
-      -- "src/**/*Tests.csproj"
+let semVersion : SemVerInfo = (parse buildVersion)
 
-let testReferences =
-    !! "src/**/*Tests.csproj"
+let Version = semVersion.ToString()
 
-type Version = {
-    Major: int
-    Minor: string
-    Patch: string
-    PreReleaseTag: string
-    PreReleaseTagWithDash: string
-    BuildMetaData: string
-    BuildMetaDataPadded: string
-    FullBuildMetaData: string
-    MajorMinorPatch: string
-    SemVer: string
-    LegacySemVer: string
-    LegacySemVerPadded: string
-    AssemblySemVer: string
-    FullSemVer: string
-    InformationalVersion: string
-    BranchName: string
-    Sha: string
-    NuGetVersionV2: string
-    NuGetVersion: string
-    CommitDate: string
-}
-let mutable gitVer = Unchecked.defaultof<Version>
+let branch = (fun _ ->
+  (environVarOrDefault "APPVEYOR_REPO_BRANCH" (getBranchName "."))
+)
 
-// Targets
+let FileVersion = (environVarOrDefault "APPVEYOR_BUILD_VERSION" (Version + "." + "0"))
+
+let informationalVersion = (fun _ ->
+  let branchName = (branch ".")
+  let label = if branchName="master" then "" else " (" + branchName + "/" + (getCurrentSHA1 ".").[0..7] + ")"
+  (FileVersion + label)
+)
+
+let nugetVersion = (fun _ ->
+  let branchName = (branch ".")
+  let label = if branchName="master" then "" else "-" + (if branchName="mt3" then "beta" else branchName)
+  let version = if branchName="master" then Version else FileVersion
+  (version + label)
+)
+
+let InfoVersion = informationalVersion()
+let NuGetVersion = nugetVersion()
+
+let versionArgs = [ @"/p:Version=""" + NuGetVersion + @""""; @"/p:PackageVersion=""" + NuGetVersion + @""""; @"/p:AssemblyVersion=""" + FileVersion + @""""; @"/p:FileVersion=""" + FileVersion + @""""; @"/p:InformationalVersion=""" + InfoVersion + @"""" ]
+
+printfn "Using version: %s" Version
+
 Target "Clean" (fun _ ->
-    CleanDirs [buildDir; testsDir; nugetDir ]
-    MSBuildRelease buildDir "Clean" appReferences
-        |> Log "Clean-Output: "
+  ensureDirectory buildArtifactPath
+
+  CleanDir buildArtifactPath
 )
 
-Target "SetVersion" (fun _ ->
-
-    let result = ExecProcessAndReturnMessages (fun info ->
-        info.FileName <- gitversion
-        info.WorkingDirectory <- "."
-        info.Arguments <- "/output json") (System.TimeSpan.FromMinutes 5.0)
-
-    if result.ExitCode <> 0 then failwithf "'GitVersion.exe' returned with a non-zero exit code"
-
-    let jsonResult = System.String.Concat(result.Messages)
-
-    jsonResult |> deserialize<Version> |> fun ver -> gitVer <- ver
-
-    CreateCSharpAssemblyInfo "./src/SolutionAssemblyInfo.cs"
-        [Attribute.Product product
-         Attribute.Company company
-         Attribute.Copyright copyright
-         Attribute.Version gitVer.AssemblySemVer
-         Attribute.FileVersion (gitVer.MajorMinorPatch + ".0")
-         Attribute.InformationalVersion gitVer.InformationalVersion]
+Target "RestorePackages" (fun _ -> 
+  DotNetCli.Restore (fun p -> { p with Project = "./src/"
+                                       AdditionalArgs = versionArgs })
 )
 
-Target "BuildApp" (fun _ ->
-    DotNetCli.Build (fun p-> { p with Project = @".\src\MassTransit.EventStoreIntegration.sln"
+Target "Build" (fun _ ->
+  DotNetCli.Build (fun p-> { p with Project = @".\src\MassTransit.EventStoreIntegration.sln"
                                     Configuration= "Release"
-                                    AdditionalArgs = gitversion })
-)
-
-Target "BuildTests" (fun _ ->
-    MSBuildRelease testsDir "Build" testReferences
-        |> Log "BuildTests-Output: "
+                                    AdditionalArgs = versionArgs })
 )
 
 Target "Package" (fun _ ->
-    DotNetCli.Pack (fun p ->
-        {p with
-            Project = @".\src\MassTransit.EventStoreIntegration.sln"
-            Configuration= "Release"
-            OutputPath = nugetDir
-         })
+  DotNetCli.Pack (fun p-> { p with 
+                                Project = @".\src\MassTransit.EventStoreIntegration.sln"
+                                Configuration= "Release"
+                                OutputPath= buildArtifactPath
+                                AdditionalArgs = versionArgs })
 )
 
-Target "Test" (fun _ ->
-    !! (testsDir + "/*Tests.dll")
-      |> NUnit3 (fun p ->
-          {p with
-             ToolPath = "packages\\NUnit.ConsoleRunner\\tools\\nunit3-console.exe"
-          })
+Target "Default" (fun _ ->
+  trace "Starting..."
 )
 
-// Build order
 "Clean"
-  ==> "SetVersion"
-  ==> "BuildApp"
-//  ==> "BuildTests"
-//  ==> "Test"
+  ==> "RestorePackages"
+  ==> "Build"
   ==> "Package"
+  ==> "Default"
 
-// start build
-RunTargetOrDefault "Package"
+RunTargetOrDefault "Default"
