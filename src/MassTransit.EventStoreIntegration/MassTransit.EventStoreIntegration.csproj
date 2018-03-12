@@ -16,6 +16,7 @@
 		<Version>1.0.1</Version>
 		<Copyright>https://github.com/alexeyzimarev https://github.com/OriginalDeveloper</Copyright>
 		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+		<PackageTags>OriginalDeveloper, MassTransit, EventStore Integration, Core</PackageTags>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.0'">
