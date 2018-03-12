@@ -6,8 +6,16 @@
 		<PackageLicenseUrl>https://github.com/OriginalDeveloper/MassTransit.EventStoreIntegration/blob/master/LICENSE</PackageLicenseUrl>
 		<PackageProjectUrl>https://github.com/OriginalDeveloper/MassTransit.EventStoreIntegration</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/OriginalDeveloper/MassTransit.EventStoreIntegration</RepositoryUrl>
-		<AssemblyVersion>1.0.0.1</AssemblyVersion>
-		<FileVersion>1.0.0.1</FileVersion>
+		<AssemblyVersion>1.0.1.1</AssemblyVersion>
+		<FileVersion>1.0.1.1</FileVersion>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<Authors>OriginalDeveloper.MassTransit.EventStoreIntegration</Authors>
+		<Company>OriginalDeveloper.MassTransit.EventStoreIntegration</Company>
+		<Product>OriginalDeveloper.MassTransit.EventStoreIntegration</Product>
+		<PackageId>OriginalDeveloper.MassTransit.EventStoreIntegration</PackageId>
+		<Version>1.0.1</Version>
+		<Copyright>https://github.com/alexeyzimarev https://github.com/OriginalDeveloper</Copyright>
+		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.0'">
