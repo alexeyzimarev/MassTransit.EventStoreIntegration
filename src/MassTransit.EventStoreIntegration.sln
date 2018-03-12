@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2036
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MassTransit.EventStoreIntegration", "MassTransit.EventStoreIntegration\MassTransit.EventStoreIntegration.csproj", "{83DE3B12-A0CA-459C-A241-2D36EA967B84}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MassTransit.EventStoreIntegration.Sample", "MassTransit.EventStoreIntegration.Sample\MassTransit.EventStoreIntegration.Sample.csproj", "{6AA9F54F-621E-4F47-A388-8475893CD954}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MassTransit.EventStoreIntegration.Tests", "MassTransit.EventStoreIntegration.Tests\MassTransit.EventStoreIntegration.Tests.csproj", "{08E4AB76-89D0-4A71-B783-AEB8A36ACCB1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{83DE3B12-A0CA-459C-A241-2D36EA967B84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83DE3B12-A0CA-459C-A241-2D36EA967B84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83DE3B12-A0CA-459C-A241-2D36EA967B84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83DE3B12-A0CA-459C-A241-2D36EA967B84}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6AA9F54F-621E-4F47-A388-8475893CD954}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6AA9F54F-621E-4F47-A388-8475893CD954}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6AA9F54F-621E-4F47-A388-8475893CD954}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6AA9F54F-621E-4F47-A388-8475893CD954}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08E4AB76-89D0-4A71-B783-AEB8A36ACCB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08E4AB76-89D0-4A71-B783-AEB8A36ACCB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08E4AB76-89D0-4A71-B783-AEB8A36ACCB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08E4AB76-89D0-4A71-B783-AEB8A36ACCB1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3BF72686-AB86-4527-8789-618844415B6E}
+	EndGlobalSection
+EndGlobal
