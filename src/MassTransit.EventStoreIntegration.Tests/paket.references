@@ -1,5 +1,0 @@
-xunit
-xunit.runner.console
-Shouldly
-EventStore.Client.Embedded
-MassTransit.Automatonymous

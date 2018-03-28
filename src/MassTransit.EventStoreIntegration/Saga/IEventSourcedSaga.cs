@@ -7,7 +7,7 @@ namespace MassTransit.EventStoreIntegration.Saga
     {
         string StreamName { get; }
 
-        int ExpectedVersion { get; set; }
+        long ExpectedVersion { get; set; }
 
         /// <summary>
         /// Initializes this instance using the specified events.

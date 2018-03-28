@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Configuration;
 using System.Threading.Tasks;
 using Automatonymous;
 using EventStore.ClientAPI;
-using EventStore.SerilogAdapter;
 using GreenPipes;
 using MassTransit.EventStoreIntegration.Saga;
 using Serilog;
@@ -12,16 +10,16 @@ namespace MassTransit.EventStoreIntegration.Sample
 {
     public class Sample
     {
-        private IBusControl _bus;
-        private IEventStoreConnection _connection;
+        private readonly IBusControl _bus;
+        private readonly IEventStoreConnection _connection;
 
         public Sample()
         {
-            Log.Logger = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.LiterateConsole().CreateLogger();
+            Log.Logger = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.Console().CreateLogger();
 
-            var connectionString = ConfigurationManager.ConnectionStrings["eventStore"];
-            _connection = EventStoreConnection.Create(connectionString.ConnectionString,
-                ConnectionSettings.Create().UseSerilog());
+            const string connectionString = "ConnectTo=tcp://admin:changeit@localhost:1113; HeartBeatTimeout=20000; HeartbeatInterval=40000;";
+            _connection = EventStoreConnection.Create(connectionString,
+                ConnectionSettings.Create());
 
             var repository = new EventStoreSagaRepository<SampleInstance>(_connection);
             _bus = Bus.Factory.CreateUsingRabbitMq(c =>
