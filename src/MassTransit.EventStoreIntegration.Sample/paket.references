@@ -1,7 +1,0 @@
-EventStore.Client
-MassTransit.Automatonymous
-MassTransit.RabbitMq
-Serilog
-Serilog.Sinks.Literate
-EventStore.SerilogAdapter
-MassTransit.SerilogIntegration

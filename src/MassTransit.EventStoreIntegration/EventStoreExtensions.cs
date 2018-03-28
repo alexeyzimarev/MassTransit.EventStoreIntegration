@@ -9,10 +9,10 @@ namespace MassTransit.EventStoreIntegration
 {
     public static class EventStoreExtensions
     {
-        public static async Task<int> SaveEvents(this IEventStoreConnection connection,
+        public static async Task<long> SaveEvents(this IEventStoreConnection connection,
             string streamIdentifier,
             IEnumerable<object> events,
-            int expectedVersion = ExpectedVersion.Any,
+            long expectedVersion = ExpectedVersion.Any,
             object metadata = null)
         {
             var esEvents = events

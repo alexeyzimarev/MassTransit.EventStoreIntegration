@@ -7,7 +7,7 @@ namespace MassTransit.EventStoreIntegration.Saga
     public abstract class EventSourcedSagaInstance : IEventSourcedSaga
     {
         public Guid CorrelationId { get; set; }
-        public int ExpectedVersion { get; set; }
+        public long ExpectedVersion { get; set; }
 
         public string StreamName =>
             TypeMapping.GetTypeName(GetType()) + "-" + CorrelationId.ToString("N");
@@ -16,15 +16,12 @@ namespace MassTransit.EventStoreIntegration.Saga
 
         public string CurrentState
         {
-            get { return _currentState; }
-            set
+            get => _currentState;
+            set => Apply(new SagaInstanceTransitioned
             {
-                Apply(new SagaInstanceTransitioned
-                {
-                    InstanceId = CorrelationId,
-                    NewState = value
-                });
-            }
+                InstanceId = CorrelationId,
+                NewState = value
+            });
         }
 
         readonly EventRecorder _recorder;
@@ -61,11 +58,12 @@ namespace MassTransit.EventStoreIntegration.Saga
             Record(@event);
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Initializes this instance using the specified events.
         /// </summary>
         /// <param name="events">The events to initialize with.</param>
-        /// <exception cref="System.ArgumentNullException">Thrown when the <paramref name="events"/> are null.</exception>
+        /// <exception cref="T:System.ArgumentNullException">Thrown when the <paramref name="events" /> are null.</exception>
         public void Initialize(IEnumerable<object> events)
         {
             if (events == null) throw new ArgumentNullException(nameof(events));
