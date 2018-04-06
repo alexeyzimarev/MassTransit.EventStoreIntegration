@@ -13,8 +13,8 @@ namespace MassTransit.EventStoreIntegration.Saga
         where TMessage : class
         where TSaga : class, IEventSourcedSaga
     {
-        static readonly ILog Log = Logger.Get<EventStoreSagaRepository<TSaga>>();
-        readonly IEventStoreConnection _connection;
+        private static readonly ILog Log = Logger.Get<EventStoreSagaRepository<TSaga>>();
+        private readonly IEventStoreConnection _connection;
 
         public EventStoreSagaConsumeContext(IEventStoreConnection connection, ConsumeContext<TMessage> context,
             TSaga instance) : base(context)
@@ -27,8 +27,7 @@ namespace MassTransit.EventStoreIntegration.Saga
 
         SagaConsumeContext<TSaga, T> SagaConsumeContext<TSaga>.PopContext<T>()
         {
-            var context = this as SagaConsumeContext<TSaga, T>;
-            if (context == null)
+            if (!(this is SagaConsumeContext<TSaga, T> context))
                 throw new ContextException(
                     $"The ConsumeContext<{TypeMetadataCache<TMessage>.ShortName}> could not be cast to {TypeMetadataCache<T>.ShortName}");
 
