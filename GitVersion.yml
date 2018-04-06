@@ -1,3 +1,9 @@
-branches: {}
+mode: ContinuousDeployment
+branches:
+  develop:
+    mode: ContinuousDeployment
+    tag: alpha
+  master:
+    mode: ContinuousDeployment
 ignore:
   sha: []
