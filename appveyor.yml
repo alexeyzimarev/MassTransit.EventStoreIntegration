@@ -9,11 +9,11 @@ assembly_info:
 before_build:
   - cmd: dotnet --version
   - ps: gitversion /l console /output buildserver /updateAssemblyInfo
-  - cmd: msbuild ./src/MassTransit.EventStoreIntegration.csproj /p:Verion="%GitVersion_NuGetVersion%" /t:restore
+  - cmd: msbuild ./src/MassTransit.EventStoreIntegration/MassTransit.EventStoreIntegration.csproj /p:Verion="%GitVersion_NuGetVersion%" /t:restore
 
 build_script:
-  - cmd: dotnet publish ./src/MassTransit.EventStoreIntegration.csproj
+  - cmd: dotnet publish ./src/MassTransit.EventStoreIntegration/MassTransit.EventStoreIntegration.csproj
 
 test_script:
-  - cmd: dotnet restore ./src/MassTransit.EventStoreIntegration.Tests.csproj
+  - cmd: dotnet restore ./src/MassTransit.EventStoreIntegration.Tests/MassTransit.EventStoreIntegration.Tests.csproj
   - cmd: dotnet xunit
