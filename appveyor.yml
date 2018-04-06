@@ -1,0 +1,18 @@
+﻿image: Visual Studio 2017
+
+install:
+  - choco install gitversion.portable -pre -y
+
+assembly_info:
+  patch: false
+
+before_build:
+  - cmd: dotnet --version
+  - ps: gitversion /l console /output buildserver /updateAssemblyInfo
+  - cmd: msbuild /p:Verion="%GitVersion_NuGetVersion%" /t:restore
+
+build_script:
+  - cmd: dotnet publish ./src/MassTransit.EventStoreIntegration.csproj
+
+test_script:
+  - cmd: dotnet xunit
