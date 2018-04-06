@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransit.EventStoreIntegration", "MassTransit.EventStoreIntegration\MassTransit.EventStoreIntegration.csproj", "{C91045B6-C27D-4B36-ABDD-760B85511225}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransit.EventStoreIntegration.Tests", "MassTransit.EventStoreIntegration.Tests\MassTransit.EventStoreIntegration.Tests.csproj", "{D003149C-5609-4047-BC2A-C3974C1E258B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransit.EventStoreIntegration.Sample", "MassTransit.EventStoreIntegration.Sample\MassTransit.EventStoreIntegration.Sample.csproj", "{9AEBAECC-6594-4F1D-A387-EE29451EDF63}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C91045B6-C27D-4B36-ABDD-760B85511225}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C91045B6-C27D-4B36-ABDD-760B85511225}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C91045B6-C27D-4B36-ABDD-760B85511225}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C91045B6-C27D-4B36-ABDD-760B85511225}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D003149C-5609-4047-BC2A-C3974C1E258B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D003149C-5609-4047-BC2A-C3974C1E258B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D003149C-5609-4047-BC2A-C3974C1E258B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D003149C-5609-4047-BC2A-C3974C1E258B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AEBAECC-6594-4F1D-A387-EE29451EDF63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AEBAECC-6594-4F1D-A387-EE29451EDF63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AEBAECC-6594-4F1D-A387-EE29451EDF63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AEBAECC-6594-4F1D-A387-EE29451EDF63}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
