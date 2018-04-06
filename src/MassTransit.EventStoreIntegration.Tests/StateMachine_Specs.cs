@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Automatonymous;
 using Automatonymous.Testing;
-using EventStore.ClientAPI;
 using MassTransit.EventStoreIntegration.Saga;
 using MassTransit.Testing;
 using MassTransit.Util;
