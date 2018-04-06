@@ -14,5 +14,5 @@ before_build:
 build_script:
   - cmd: msbuild /t:Pack /p:Verion="%GitVersion_NuGetVersion%" ./src/MassTransit.EventStoreIntegration/MassTransit.EventStoreIntegration.csproj
 
-test_script:
-  - cmd: dotnet test ./src/MassTransit.EventStoreIntegration.Tests/MassTransit.EventStoreIntegration.Tests.csproj
+#test_script:
+#  - cmd: dotnet test ./src/MassTransit.EventStoreIntegration.Tests/MassTransit.EventStoreIntegration.Tests.csproj
