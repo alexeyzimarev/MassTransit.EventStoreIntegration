@@ -9,9 +9,10 @@ assembly_info:
 before_build:
   - cmd: dotnet --version
   - ps: gitversion /l console /output buildserver /updateAssemblyInfo
+  - cmd: msbuild /p:Verion="%GitVersion_NuGetVersion%" /t:restore
 
 build_script:
-  - cmd: msbuild /t:Pack /p:Verion="%GitVersion_NuGetVersion%" ./src/MassTransit.EventStoreIntegration/MassTransit.EventStoreIntegration.csproj
+  - cmd: dotnet publish ./src/MassTransit.EventStoreIntegration.csproj
 
 test_script:
-  - cmd: dotnet test ./src/MassTransit.EventStoreIntegration.Tests/MassTransit.EventStoreIntegration.Tests.csproj
+  - cmd: dotnet xunit
