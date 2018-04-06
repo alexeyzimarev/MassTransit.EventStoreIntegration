@@ -1,16 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <PackageLicenseUrl>https://github.com/alexeyzimarev/MassTransit.EventStoreIntegration/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/alexeyzimarev/MassTransit.EventStoreIntegration</PackageProjectUrl>
-    <Description>Event-sourced sagas for MassTransit using EventStore. Also, the audit store.</Description>
-    <Authors>Alexey Zimarev</Authors>
-    <Version>4.0.1</Version>
-    <Optimize>false</Optimize>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="EventStore.Client" Version="4.1.0" />
-    <PackageReference Include="MassTransit" Version="4.0.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-  </ItemGroup>
+    <PropertyGroup>
+        <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
+        <PackageLicenseUrl>https://github.com/alexeyzimarev/MassTransit.EventStoreIntegration/blob/master/LICENSE</PackageLicenseUrl>
+        <PackageProjectUrl>https://github.com/alexeyzimarev/MassTransit.EventStoreIntegration</PackageProjectUrl>
+        <Description>Event-sourced sagas for MassTransit using EventStore. Also, the audit store.</Description>
+        <Authors>Alexey Zimarev</Authors>
+        <Optimize>false</Optimize>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="MassTransit" Version="4.0.1"/>
+        <PackageReference Include="Newtonsoft.Json" Version="10.0.3"/>
+    </ItemGroup>
+    <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
+        <PackageReference Include="EventStore.Client" Version="4.1.0"/>
+    </ItemGroup>
+    <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+        <PackageReference Include="EventStore.ClientAPI.NetCore" Version="4.1.0.23"/>
+    </ItemGroup>
 </Project>
