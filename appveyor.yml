@@ -49,7 +49,7 @@
     - gitversion /l console /output buildserver
     - echo %GitVersion_NuGetVersion%
     - dotnet restore ./src/MassTransit.EventStoreIntegration.sln
-    - msbuild /t:Pack /p:Configuration=Debug /p:Verion=%GitVersion_NuGetVersion% ./src/MassTransit.EventStoreIntegration/MassTransit.EventStoreIntegration.csproj
+    - msbuild /t:Pack /p:Configuration=Debug /p:PackageVerion=%GitVersion_NuGetVersion% ./src/MassTransit.EventStoreIntegration/MassTransit.EventStoreIntegration.csproj
 
   test_script:
     - cmd: dotnet test ./src/MassTransit.EventStoreIntegration.Tests/MassTransit.EventStoreIntegration.Tests.csproj
