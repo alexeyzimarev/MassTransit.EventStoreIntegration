@@ -6,7 +6,6 @@
         <Description>Event-sourced sagas for MassTransit using EventStore. Also, the audit store.</Description>
         <Authors>Alexey Zimarev</Authors>
         <Optimize>false</Optimize>
-        <Version>4.0.1</Version>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="MassTransit" Version="4.0.1"/>

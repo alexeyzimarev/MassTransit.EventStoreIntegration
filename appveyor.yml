@@ -44,13 +44,12 @@
 
   configuration: Debug
 
-  before_build:
-    - cmd: dotnet --version
-    - ps: gitversion /l console /output buildserver /updateAssemblyInfo
-    - cmd: dotnet restore ./src/MassTransit.EventStoreIntegration.sln
-
   build_script:
-    - cmd: msbuild /t:Pack /p:Configuration=Debug /p:Verion="%GitVersion_NuGetVersion%" ./src/MassTransit.EventStoreIntegration/MassTransit.EventStoreIntegration.csproj
+    - dotnet --version
+    - gitversion /l console /output buildserver
+    - echo %GitVersion_NuGetVersion%
+    - dotnet restore ./src/MassTransit.EventStoreIntegration.sln
+    - msbuild /t:Pack /p:Configuration=Debug /p:Verion=%GitVersion_NuGetVersion% ./src/MassTransit.EventStoreIntegration/MassTransit.EventStoreIntegration.csproj
 
   test_script:
     - cmd: dotnet test ./src/MassTransit.EventStoreIntegration.Tests/MassTransit.EventStoreIntegration.Tests.csproj
