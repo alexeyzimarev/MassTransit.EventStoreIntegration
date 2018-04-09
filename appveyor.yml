@@ -16,13 +16,12 @@
 
   configuration: Release
 
-  before_build:
-    - cmd: dotnet --version
-    - ps: gitversion /l console /output buildserver /updateAssemblyInfo
-    - cmd: dotnet restore ./src/MassTransit.EventStoreIntegration.sln
-
   build_script:
-    - cmd: msbuild /t:Pack /p:Configuration=Release /p:Verion="%GitVersion_NuGetVersion%" ./src/MassTransit.EventStoreIntegration/MassTransit.EventStoreIntegration.csproj
+    - dotnet --version
+    - gitversion /l console /output buildserver
+    - echo %GitVersion_NuGetVersion%
+    - dotnet restore ./src/MassTransit.EventStoreIntegration.sln
+    - msbuild /t:build,pack /p:Configuration=Release /p:Version=%GitVersion_NuGetVersion% ./src/MassTransit.EventStoreIntegration/MassTransit.EventStoreIntegration.csproj
 
   test_script:
     - cmd: dotnet test ./src/MassTransit.EventStoreIntegration.Tests/MassTransit.EventStoreIntegration.Tests.csproj
@@ -49,7 +48,7 @@
     - gitversion /l console /output buildserver
     - echo %GitVersion_NuGetVersion%
     - dotnet restore ./src/MassTransit.EventStoreIntegration.sln
-    - msbuild /t:Pack /p:Configuration=Debug /p:PackageVerion=%GitVersion_NuGetVersion% ./src/MassTransit.EventStoreIntegration/MassTransit.EventStoreIntegration.csproj
+    - msbuild /t:build,pack /p:Configuration=Debug /p:Version=%GitVersion_NuGetVersion% ./src/MassTransit.EventStoreIntegration/MassTransit.EventStoreIntegration.csproj
 
   test_script:
     - cmd: dotnet test ./src/MassTransit.EventStoreIntegration.Tests/MassTransit.EventStoreIntegration.Tests.csproj
