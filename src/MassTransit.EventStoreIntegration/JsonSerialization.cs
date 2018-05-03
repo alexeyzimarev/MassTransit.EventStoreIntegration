@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 using EventStore.ClientAPI;
 using Newtonsoft.Json;
 
