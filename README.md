@@ -2,13 +2,16 @@
 EventStore audit store for MassTransit
 
 [![NuGet](https://img.shields.io/nuget/v/MassTransit.EventStoreIntegration.svg)](https://www.nuget.org/packages/MassTransit.EventStoreIntegration/)
-[![Build Status](https://www.myget.org/BuildSource/Badge/az-github?identifier=39b98d97-5aa1-42d9-aecd-cda6fb6f086d)](https://www.myget.org/)
 
 ## Installation
 
 The library is published on nuget.org.
 
-Use `Install-Package MassTransit.EventStoreIntegration` to install it.
+Install using the dotnet CLI command or your IDE:
+
+```
+dotnet add package MassTransit.EventStoreIntegration
+```
 
 ## Usage
 
@@ -112,6 +115,10 @@ You can see that in each `When` we need to call the `ApplyChange` method
 to trigger the instance event handler, which changes the instance state.
 All changes are then saved as separate events.
 
+Keep in mind that state transitions are recorded implicitly as separate events of
+type `SagaInstanceTransitioned`. Those events don't need to be explicitly handled,
+it happens automatically.
+
 The last step is to tell MassTransit to use the EventStore repository:
 
 ```csharp
@@ -120,16 +127,17 @@ var repository = new EventStoreSagaRepository<SampleInstance>(connection);
 
 var bus = Bus.Factory.CreateUsingRabbitMq(c =>
     {
-        var host = c.Host(new Uri("rabbitmq://localhost"), h =>
+        c.Host(new Uri("rabbitmq://localhost"), h =>
         {
             h.Username("guest");
             h.Password("guest");
         });
 
         var machine = new SampleStateMachine();
-        c.ReceiveEndpoint(host, "essaga_test", 
+        c.ReceiveEndpoint("essaga_test", 
             ep => ep.StateMachineSaga(machine, repository));
-    });
+    }
+);
 ```
 
 Working sample is available in this repository, in the `MassTransit.EventStoreIntegration.Sample` project.
