@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
     <PackageLicenseUrl>https://github.com/alexeyzimarev/MassTransit.EventStoreIntegration/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/alexeyzimarev/MassTransit.EventStoreIntegration</PackageProjectUrl>
     <Description>Event-sourced sagas for MassTransit using EventStore. Also, the audit store.</Description>
     <Authors>Alexey Zimarev</Authors>
     <Optimize>false</Optimize>
     <LangVersion>8</LangVersion>
+    <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="EventStore.Client" Version="5.0.5" />
