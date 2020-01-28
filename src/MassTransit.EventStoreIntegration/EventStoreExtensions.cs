@@ -10,11 +10,20 @@ namespace MassTransit.EventStoreIntegration
 {
     public static class EventStoreExtensions
     {
-        public static async Task<long> SaveEvents(this IEventStoreConnection connection,
-            string streamIdentifier,
-            IEnumerable<object> events,
-            long expectedVersion,
-            EventMetadata metadata)
+        /// <summary>
+        /// Serialize and append events to the specified stream
+        /// </summary>
+        /// <param name="connection">EventStore connection</param>
+        /// <param name="stream">Stream name</param>
+        /// <param name="events">Collection of events</param>
+        /// <param name="expectedVersion">Expected stream version</param>
+        /// <returns></returns>
+        public static async Task<long> SaveEvents(
+            this IEventStoreConnection connection,
+            string stream,
+            IEnumerable<(object @event, EventMetadata metadata)> events,
+            long expectedVersion
+        )
         {
             var esEvents = events
                 .Select(x =>
@@ -22,24 +31,28 @@ namespace MassTransit.EventStoreIntegration
                         Guid.NewGuid(),
                         TypeMapping.GetTypeName(x.GetType()),
                         true,
-                        JsonSerialisation.Serialize(x),
-                        JsonSerialisation.Serialize(metadata)));
+                        JsonSerialisation.Serialize(x.@event),
+                        JsonSerialisation.Serialize(x.metadata)
+                    )
+                );
 
-            var result = await connection.AppendToStreamAsync(streamIdentifier, expectedVersion, esEvents);
+            var result = await connection.AppendToStreamAsync(stream, expectedVersion, esEvents).ConfigureAwait(false);
+            
             return result.NextExpectedVersion;
         }
 
-        public static async Task<EventsData> ReadEvents(this IEventStoreConnection connection,
-            string streamName, int sliceSize, Assembly assembly)
+        public static async Task<EventsData> ReadEvents(
+            this IEventStoreConnection connection,
+            string streamName, int sliceSize, string assemblyName
+        )
         {
             var slice = await
                 connection.ReadStreamEventsForwardAsync(streamName, StreamPosition.Start, sliceSize, false);
             if (slice.Status == SliceReadStatus.StreamDeleted || slice.Status == SliceReadStatus.StreamNotFound)
                 return null;
 
-            var assemblyName = assembly.GetName().Name;
             var lastEventNumber = slice.LastEventNumber;
-            var events = new List<object>();
+            var events          = new List<object>();
             events.AddRange(slice.Events.SelectMany(x => JsonSerialisation.Deserialize(x, assemblyName)));
 
             while (!slice.IsEndOfStream)
@@ -49,6 +62,7 @@ namespace MassTransit.EventStoreIntegration
                 events.AddRange(slice.Events.SelectMany(x => JsonSerialisation.Deserialize(x, assemblyName)));
                 lastEventNumber = slice.LastEventNumber;
             }
+
             var tuple = new EventsData(events, lastEventNumber);
             return tuple;
         }

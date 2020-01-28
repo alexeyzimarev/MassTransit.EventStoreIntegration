@@ -12,7 +12,7 @@ namespace MassTransit.EventStoreIntegration.Saga
         public string StreamName =>
             TypeMapping.GetTypeName(GetType()) + "-" + CorrelationId.ToString("N");
 
-        private string _currentState;
+        string _currentState;
 
         public string CurrentState
         {

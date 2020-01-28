@@ -46,5 +46,4 @@ namespace MassTransit.EventStoreIntegration.Saga
         /// </returns>
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
-
 }

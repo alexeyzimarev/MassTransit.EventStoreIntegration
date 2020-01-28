@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 
 namespace MassTransit.EventStoreIntegration
 {
@@ -19,10 +18,8 @@ namespace MassTransit.EventStoreIntegration
         /// <param name="type">Type</param>
         public static void Add(string key, Type type)
         {
-            Type t;
-            string s;
-            if (Cached.Instance.ContainsKey(key)) Cached.Instance.TryRemove(key, out t);
-            if (Cached.ReverseInstance.ContainsKey(type)) Cached.ReverseInstance.TryRemove(type, out s);
+            if (Cached.Instance.ContainsKey(key)) Cached.Instance.TryRemove(key, out _);
+            if (Cached.ReverseInstance.ContainsKey(type)) Cached.ReverseInstance.TryRemove(type, out _);
 
             Cached.Instance.TryAdd(key, type);
             Cached.ReverseInstance.TryAdd(type, key);
@@ -62,7 +59,7 @@ namespace MassTransit.EventStoreIntegration
                 ? Cached.ReverseInstance[type]
                 : type.FullName;
 
-        private static class Cached
+        static class Cached
         {
             internal static readonly ConcurrentDictionary<string, Type> Instance =
                 new ConcurrentDictionary<string, Type>();

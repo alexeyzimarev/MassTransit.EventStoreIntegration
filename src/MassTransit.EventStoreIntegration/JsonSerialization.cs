@@ -16,24 +16,20 @@ namespace MassTransit.EventStoreIntegration
                 yield break;
             }
 
-            using (var stream = new MemoryStream(resolvedEvent.Event.Data))
-            using (var reader = new StreamReader(stream))
-            {
-                yield return JsonSerializer.CreateDefault().Deserialize(reader, type);
-            }
+            using var stream = new MemoryStream(resolvedEvent.Event.Data);
+            using var reader = new StreamReader(stream);
+            
+            yield return JsonSerializer.CreateDefault().Deserialize(reader, type);
         }
 
         public static byte[] Serialize(object @event)
         {
-            using (var stream = new MemoryStream())
-            {
-                using (var writer = new StreamWriter(stream))
-                {
-                    JsonSerializer.CreateDefault().Serialize(writer, @event);
-                    writer.Flush();
-                }
-                return stream.ToArray();
-            }
+            using var stream = new MemoryStream();
+            using var writer = new StreamWriter(stream);
+            
+            JsonSerializer.CreateDefault().Serialize(writer, @event);
+            writer.Flush();
+            return stream.ToArray();
         }
     }
 }

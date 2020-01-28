@@ -6,15 +6,12 @@
     <Description>Event-sourced sagas for MassTransit using EventStore. Also, the audit store.</Description>
     <Authors>Alexey Zimarev</Authors>
     <Optimize>false</Optimize>
+    <LangVersion>8</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="MassTransit" Version="5.1.4" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-  </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
-    <PackageReference Include="EventStore.Client" Version="4.1.1" />
-  </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
-    <PackageReference Include="EventStore.ClientAPI.NetCore" Version="4.1.0.23" />
+    <PackageReference Include="EventStore.Client" Version="5.0.5" />
+    <PackageReference Include="MassTransit" Version="6.0.2" />
+    
+    <PackageReference Include="MinVer" Version="2.0.0" PrivateAssets="All" />
   </ItemGroup>
 </Project>

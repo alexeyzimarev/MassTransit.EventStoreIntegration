@@ -2,19 +2,17 @@
 using System.Threading.Tasks;
 using EventStore.ClientAPI;
 using MassTransit.Context;
-using MassTransit.Logging;
-using MassTransit.Util;
+using MassTransit.Saga;
 
 namespace MassTransit.EventStoreIntegration.Saga
 {
     public class EventStoreSagaConsumeContext<TSaga, TMessage> :
-        ConsumeContextProxyScope<TMessage>,
+        ConsumeContextScope<TMessage>,
         SagaConsumeContext<TSaga, TMessage>
         where TMessage : class
         where TSaga : class, IEventSourcedSaga
     {
-        private static readonly ILog Log = Logger.Get<EventStoreSagaRepository<TSaga>>();
-        private readonly IEventStoreConnection _connection;
+        readonly IEventStoreConnection _connection;
 
         public EventStoreSagaConsumeContext(IEventStoreConnection connection, ConsumeContext<TMessage> context,
             TSaga instance) : base(context)
@@ -25,24 +23,13 @@ namespace MassTransit.EventStoreIntegration.Saga
 
         Guid? MessageContext.CorrelationId => Saga.CorrelationId;
 
-        SagaConsumeContext<TSaga, T> SagaConsumeContext<TSaga>.PopContext<T>()
-        {
-            if (!(this is SagaConsumeContext<TSaga, T> context))
-                throw new ContextException(
-                    $"The ConsumeContext<{TypeMetadataCache<TMessage>.ShortName}> could not be cast to {TypeMetadataCache<T>.ShortName}");
-
-            return context;
-        }
-
         async Task SagaConsumeContext<TSaga>.SetCompleted()
         {
             await _connection.DeleteStreamAsync(Saga.StreamName, Saga.ExpectedVersion, false);
 
             IsCompleted = true;
-            if (Log.IsDebugEnabled)
-                Log.DebugFormat("SAGA:{0}:{1} Removed {2}", TypeMetadataCache<TSaga>.ShortName,
-                    TypeMetadataCache<TMessage>.ShortName,
-                    Saga.CorrelationId);
+            
+            this.LogRemoved();
         }
 
         public TSaga Saga { get; }

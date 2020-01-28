@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{7D4B7D2B-2627-4F70-A9CA-D7B735E7FD5D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sample", "Sample", "{E80554D7-4608-4999-A70D-99DAB5C214C7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransit.EventStoreIntegration", "src\MassTransit.EventStoreIntegration\MassTransit.EventStoreIntegration.csproj", "{0DDF068A-93AD-48C1-8FC5-0EB2C4D2AFF9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransit.EventStoreIntegration.Tests", "test\MassTransit.EventStoreIntegration.Tests\MassTransit.EventStoreIntegration.Tests.csproj", "{1E07C228-A312-482D-9BFC-C3F8DFD9CFBD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransit.EventStoreIntegration.Sample", "sample\MassTransit.EventStoreIntegration.Sample\MassTransit.EventStoreIntegration.Sample.csproj", "{E4251EF1-200A-4EBD-8C16-CBDE0F08227C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0DDF068A-93AD-48C1-8FC5-0EB2C4D2AFF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DDF068A-93AD-48C1-8FC5-0EB2C4D2AFF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DDF068A-93AD-48C1-8FC5-0EB2C4D2AFF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DDF068A-93AD-48C1-8FC5-0EB2C4D2AFF9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E07C228-A312-482D-9BFC-C3F8DFD9CFBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E07C228-A312-482D-9BFC-C3F8DFD9CFBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E07C228-A312-482D-9BFC-C3F8DFD9CFBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E07C228-A312-482D-9BFC-C3F8DFD9CFBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4251EF1-200A-4EBD-8C16-CBDE0F08227C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4251EF1-200A-4EBD-8C16-CBDE0F08227C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4251EF1-200A-4EBD-8C16-CBDE0F08227C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4251EF1-200A-4EBD-8C16-CBDE0F08227C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1E07C228-A312-482D-9BFC-C3F8DFD9CFBD} = {7D4B7D2B-2627-4F70-A9CA-D7B735E7FD5D}
+		{E4251EF1-200A-4EBD-8C16-CBDE0F08227C} = {E80554D7-4608-4999-A70D-99DAB5C214C7}
+	EndGlobalSection
+EndGlobal

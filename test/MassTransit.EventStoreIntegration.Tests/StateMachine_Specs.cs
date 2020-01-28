@@ -4,50 +4,36 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Automatonymous;
-using Automatonymous.Testing;
 using MassTransit.EventStoreIntegration.Saga;
 using MassTransit.Testing;
-using MassTransit.Util;
 using Shouldly;
 using Xunit;
 
 namespace MassTransit.EventStoreIntegration.Tests
 {
-    public class StateMachine_Specs : IDisposable, IClassFixture<EventStoreFixture>
+    public class StateMachine_Specs : IAsyncLifetime
     {
-        EventStoreFixture _fixture;
-        InMemoryTestHarness _harness;
-        private StateMachineSagaTestHarness<Instance, TestStateMachine> _saga;
-        Guid _sagaId;
-        private EventStoreSagaRepository<Instance> _repository;
-        private TestStateMachine _machine;
+        InMemoryTestHarness                                     _harness;
+        StateMachineSagaTestHarness<Instance, TestStateMachine> _saga;
+        Guid                                                    _sagaId;
+        EventStoreSagaRepository<Instance>                      _repository;
+        TestStateMachine                                        _machine;
 
-        public StateMachine_Specs(EventStoreFixture fixture)
+        public StateMachine_Specs()
         {
-            _fixture = fixture;
             _sagaId = Guid.NewGuid();
 
-            _harness = new InMemoryTestHarness();
-            _repository = new EventStoreSagaRepository<Instance>(_fixture.Connection);
-            _machine = new TestStateMachine();
-            _saga = _harness.StateMachineSaga(_machine, _repository);
-
-            TaskUtil.Await(StartHarness);
+            _harness    = new InMemoryTestHarness();
+            _repository = new EventStoreSagaRepository<Instance>(EventStoreFixture.Connection);
+            _machine    = new TestStateMachine();
+            _saga       = _harness.StateMachineSaga(_machine, _repository);
         }
 
         public TimeSpan TestTimeout =>
             Debugger.IsAttached ? TimeSpan.FromMinutes(50) : TimeSpan.FromSeconds(30);
 
-        string StreamName<T>(Guid guid) =>
+        static string StreamName<T>(Guid guid) =>
             TypeMapping.GetTypeName(typeof(T)) + "-" + guid.ToString("N");
-
-        private async Task StartHarness()
-        {
-            await _harness.Start();
-            await _harness.InputQueueSendEndpoint.Send(new ProcessStarted {CorrelationId = _sagaId});
-        }
-
-        public void Dispose() => TaskUtil.Await(_harness.Stop);
 
         [Fact]
         public async Task Should_have_been_started()
@@ -62,7 +48,9 @@ namespace MassTransit.EventStoreIntegration.Tests
             var instance = await _repository.ShouldContainSaga(_sagaId, TestTimeout);
 
             var streamName = StreamName<Instance>(_sagaId);
-            var events = await _fixture.Connection.ReadEvents(streamName, 512, Assembly.GetExecutingAssembly());
+            var events =
+                await EventStoreFixture.Connection.ReadEvents(streamName, 512,
+                    Assembly.GetExecutingAssembly().GetName().Name);
             events.LastVersion.ShouldBe(2);
             events.Events.ElementAt(1).ShouldBeOfType<ProcessStarted>();
         }
@@ -76,7 +64,9 @@ namespace MassTransit.EventStoreIntegration.Tests
             await _repository.ShouldContainSaga(_sagaId, x => x.SomeString == "new", TestTimeout);
 
             var streamName = StreamName<Instance>(_sagaId);
-            var events = await _fixture.Connection.ReadEvents(streamName, 512, Assembly.GetExecutingAssembly());
+            var events =
+                await EventStoreFixture.Connection.ReadEvents(streamName, 512,
+                    Assembly.GetExecutingAssembly().GetName().Name);
             events.LastVersion.ShouldBe(2);
             events.Events.ElementAt(1).ShouldBeOfType<ProcessStarted>();
         }
@@ -88,7 +78,7 @@ namespace MassTransit.EventStoreIntegration.Tests
                 CorrelationId = correlationId;
             }
 
-            private Instance()
+            Instance()
             {
                 Register<SomeStringAssigned>(x => SomeString = x.NewValue);
             }
@@ -119,10 +109,10 @@ namespace MassTransit.EventStoreIntegration.Tests
                         .TransitionTo(Done));
             }
 
-            public State Running { get; private set; }
-            public State Done { get; private set; }
-            public Event<ProcessStarted> Started { get; private set; }
-            public Event<ProcessStopped> Stopped { get; private set; }
+            public State                     Running     { get; private set; }
+            public State                     Done        { get; private set; }
+            public Event<ProcessStarted>     Started     { get; private set; }
+            public Event<ProcessStopped>     Stopped     { get; private set; }
             public Event<SomeStringAssigned> DataChanged { get; private set; }
         }
 
@@ -138,8 +128,16 @@ namespace MassTransit.EventStoreIntegration.Tests
 
         class SomeStringAssigned : CorrelatedBy<Guid>
         {
-            public Guid CorrelationId { get; set; }
-            public string NewValue { get; set; }
+            public Guid   CorrelationId { get; set; }
+            public string NewValue      { get; set; }
         }
+
+        public async Task InitializeAsync()
+        {
+            await _harness.Start();
+            await _harness.InputQueueSendEndpoint.Send(new ProcessStarted {CorrelationId = _sagaId});
+        }
+
+        public Task DisposeAsync() => _harness.Stop();
     }
 }
