@@ -13,23 +13,23 @@ namespace MassTransit.EventStoreIntegration.Tests
 {
     public class StateMachine_Specs : IAsyncLifetime
     {
-        InMemoryTestHarness                                     _harness;
-        StateMachineSagaTestHarness<Instance, TestStateMachine> _saga;
-        Guid                                                    _sagaId;
-        EventStoreSagaRepository<Instance>                      _repository;
-        TestStateMachine                                        _machine;
+        readonly InMemoryTestHarness                _harness;
+        readonly Guid                               _sagaId;
+        readonly EventStoreSagaRepository<Instance> _repository;
+        string                                      _assemblyName;
 
         public StateMachine_Specs()
         {
-            _sagaId = Guid.NewGuid();
+            _sagaId       = Guid.NewGuid();
+            _assemblyName = Assembly.GetExecutingAssembly().GetName().Name;
 
             _harness    = new InMemoryTestHarness();
             _repository = new EventStoreSagaRepository<Instance>(EventStoreFixture.Connection);
-            _machine    = new TestStateMachine();
-            _saga       = _harness.StateMachineSaga(_machine, _repository);
+            var machine = new TestStateMachine();
+            _harness.StateMachineSaga(machine, _repository);
         }
 
-        public TimeSpan TestTimeout =>
+        static TimeSpan TestTimeout =>
             Debugger.IsAttached ? TimeSpan.FromMinutes(50) : TimeSpan.FromSeconds(30);
 
         static string StreamName<T>(Guid guid) =>
@@ -45,29 +45,30 @@ namespace MassTransit.EventStoreIntegration.Tests
         [Fact]
         public async Task Should_load_the_stream()
         {
-            var instance = await _repository.ShouldContainSaga(_sagaId, TestTimeout);
+            await _repository.ShouldContainSaga(_sagaId, TestTimeout);
 
             var streamName = StreamName<Instance>(_sagaId);
-            var events =
-                await EventStoreFixture.Connection.ReadEvents(streamName, 512,
-                    Assembly.GetExecutingAssembly().GetName().Name);
+            var events     = await EventStoreFixture.Connection.ReadEvents(streamName, 512, _assemblyName);
+
             events.LastVersion.ShouldBe(2);
             events.Events.ElementAt(1).ShouldBeOfType<ProcessStarted>();
         }
 
-//        [Fact]
+        [Fact]
         public async Task Should_assign_value()
         {
             await _repository.ShouldContainSaga(_sagaId, TestTimeout);
+
             await _harness.InputQueueSendEndpoint.Send(
-                new SomeStringAssigned {CorrelationId = _sagaId, NewValue = "new"});
+                new SomeStringAssigned {CorrelationId = _sagaId, NewValue = "new"}
+            );
+
             await _repository.ShouldContainSaga(_sagaId, x => x.SomeString == "new", TestTimeout);
 
             var streamName = StreamName<Instance>(_sagaId);
-            var events =
-                await EventStoreFixture.Connection.ReadEvents(streamName, 512,
-                    Assembly.GetExecutingAssembly().GetName().Name);
-            events.LastVersion.ShouldBe(2);
+            var events     = await EventStoreFixture.Connection.ReadEvents(streamName, 512, _assemblyName);
+            
+            events.LastVersion.ShouldBe(3);
             events.Events.ElementAt(1).ShouldBeOfType<ProcessStarted>();
         }
 

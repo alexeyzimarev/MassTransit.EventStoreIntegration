@@ -29,7 +29,7 @@ namespace MassTransit.EventStoreIntegration
                 .Select(x =>
                     new EventData(
                         Guid.NewGuid(),
-                        TypeMapping.GetTypeName(x.GetType()),
+                        TypeMapping.GetTypeName(x.@event.GetType()),
                         true,
                         JsonSerialisation.Serialize(x.@event),
                         JsonSerialisation.Serialize(x.metadata)
