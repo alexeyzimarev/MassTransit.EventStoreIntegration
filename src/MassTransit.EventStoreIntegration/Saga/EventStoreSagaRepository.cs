@@ -72,9 +72,9 @@ namespace MassTransit.EventStoreIntegration.Saga
         }
 
         public Task SendQuery<T>(
-            SagaQueryConsumeContext<TSaga, T> context, ISagaPolicy<TSaga, T> policy,
+            ConsumeContext<T> context, ISagaQuery<TSaga> query, ISagaPolicy<TSaga, T> policy,
             IPipe<SagaConsumeContext<TSaga, T>> next
-        ) where T : class
+            ) where T : class
         {
             throw new NotImplementedByDesignException("Redis saga repository does not support queries");
         }
@@ -112,17 +112,17 @@ namespace MassTransit.EventStoreIntegration.Saga
             }
         }
 
-        async Task PreInsertSagaInstance<T>(TSaga instance, ConsumeContext<T> context) where T : class
+        async Task PreInsertSagaInstance<T>(TSaga instance, ConsumeContext<T> context) where T : class 
         {
             try
             {
                 await _connection.PersistSagaInstance(instance, context, _getEventMetadata).ConfigureAwait(false);
 
-                context.LogInsert(this, instance.CorrelationId);
+                context.LogInsert<TSaga, T>(instance.CorrelationId);
             }
             catch (Exception ex)
             {
-                context.LogInsertFault(this, ex, instance.CorrelationId);
+                context.LogInsertFault<TSaga, T>(ex, instance.CorrelationId);
             }
         }
 
