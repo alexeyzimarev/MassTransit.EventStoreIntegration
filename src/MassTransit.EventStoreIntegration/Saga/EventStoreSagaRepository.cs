@@ -76,7 +76,7 @@ namespace MassTransit.EventStoreIntegration.Saga
             IPipe<SagaConsumeContext<TSaga, T>> next
             ) where T : class
         {
-            throw new NotImplementedByDesignException("Redis saga repository does not support queries");
+            throw new NotImplementedByDesignException("EventStore saga repository does not support queries");
         }
 
         public void Probe(ProbeContext context)
